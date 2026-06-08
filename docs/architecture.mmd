@@ -1,0 +1,15 @@
+flowchart TD
+    proposal["User change proposal"] --> ui["CLI or Streamlit UI"]
+    ui --> guardrails["Input guardrails"]
+    guardrails --> intake["ChangeIntakeAgent"]
+    intake --> retrieval["ContextRetrievalAgent"]
+    local["Local markdown context"] --> retrieval
+    foundry["Microsoft Foundry agent\nfile search source material"] --> retrieval
+    retrieval --> risk["RiskAnalysisAgent"]
+    risk --> gaps["EvidenceGapAgent"]
+    gaps --> verification["VerificationPlannerAgent"]
+    verification --> report["ReviewReportAgent"]
+    report --> outputs["Markdown report\nreasoning trace\nlocal run log"]
+
+    guardrails -. "blocks apparent secrets\nand mutation requests" .-> outputs
+    outputs -. "advisory only\nhuman approval remains required" .-> reviewer["Human reviewer"]

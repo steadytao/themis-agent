@@ -8,7 +8,7 @@
 
 [![Python](https://img.shields.io/badge/Python-3.12%2B-D9A441.svg?style=for-the-badge&logo=python&logoColor=white&labelColor=15120C)](pyproject.toml "Python")
 [![Streamlit](https://img.shields.io/badge/UI-Streamlit-C88A2B.svg?style=for-the-badge&logo=streamlit&logoColor=white&labelColor=15120C)](app.py "Streamlit UI")
-[![Tests](https://img.shields.io/badge/Tests-72_passing-9E7A33.svg?style=for-the-badge&labelColor=15120C)](docs/testing.md "Testing")
+[![Tests](https://img.shields.io/badge/Tests-73_passing-9E7A33.svg?style=for-the-badge&labelColor=15120C)](docs/testing.md "Testing")
 [![Licence: MIT](https://img.shields.io/badge/Licence-MIT-C88A2B.svg?style=for-the-badge&labelColor=15120C)](LICENSE "Licence")
 
 </div>
@@ -21,6 +21,7 @@ Section | Start here for
 :-- | :--
 [What Themis is](#what-themis-is) | project scope
 [Why Themis matters](#why-themis-matters) | practical need
+[Demo video](#demo) | demo video, hosted on YouTube
 [Quick start](#quick-start) | deterministic local demo
 [Example input](#example-input) | main risky scenario
 [Example output](#example-output) | checked-in sample reports
@@ -47,6 +48,16 @@ The output is advisory. A human reviewer still approves, rejects or asks for mor
 Infrastructure changes often fail before the deployment starts: the change record does not name the exposure boundary, the rollback path is vague, owner approval is missing or the post-change checks only prove that something responds. Themis turns that kind of proposal into review material a human can act on before users are affected.
 
 The project is deliberately read-only. It does not deploy, scan, mutate cloud resources or replace approval. Its value is in making the reasoning visible: what is known, what is assumed, what is missing, what should be verified and what should stop the change from being treated as ready.
+
+## Demo
+
+<div align="center">
+
+[![Themis demo video](https://img.youtube.com/vi/ZUJ5CYiLXoo/maxresdefault.jpg)](https://www.youtube.com/watch?v=ZUJ5CYiLXoo)
+
+Watch: https://www.youtube.com/watch?v=ZUJ5CYiLXoo
+
+</div>
 
 ## Quick start
 ```powershell
@@ -223,5 +234,3 @@ README media is stored under `.github/assets/`:
 - [themis-markdown-report.png](.github/assets/themis-markdown-report.png), linear Markdown report
 - [themis-reasoning-trace.png](.github/assets/themis-reasoning-trace.png), reasoning trace
 - [themis-safety-model.png](.github/assets/themis-safety-model.png), safety model
-
-Demo video: to be added.

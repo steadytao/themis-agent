@@ -3,7 +3,7 @@
 ## Recommendation
 INSUFFICIENT EVIDENCE
 
-## Confidence
+## Readiness confidence
 0.37
 
 ## Summary

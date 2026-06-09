@@ -19,7 +19,7 @@ def test_markdown_report_includes_required_sections() -> None:
 
     for heading in [
         "## Recommendation",
-        "## Confidence",
+        "## Readiness confidence",
         "## Facts",
         "## Assumptions",
         "## Missing evidence",

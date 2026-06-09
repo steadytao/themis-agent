@@ -1,6 +1,6 @@
 # Microsoft IQ integration
 
-Themis keeps Microsoft IQ/Foundry retrieval behind the `ContextRetrievalAgent` contract. Mock mode is the guaranteed retrieval path. Foundry mode is currently a Foundry agent adapter unless configured source material and verification prove an IQ-grounded retrieval path.
+Themis keeps Microsoft IQ/Foundry retrieval behind the `ContextRetrievalAgent` contract. Mock mode is the guaranteed retrieval path. Foundry mode uses a Foundry agent adapter. For the included sample source material, the Foundry file-search path has source-citation evidence in [foundry_verification.md](foundry_verification.md).
 
 The stable interface is:
 ```python
@@ -21,7 +21,7 @@ uv run themis-setup
 uv run themis-review samples/change_risky.md --context-mode foundry
 ```
 
-The configured Foundry agent should have source material containing the same kind of architecture, network policy and deployment runbook context used by the mock samples. The setup wizard creates new agents with file-search source material when the sample context files are present. The default model deployment is `gpt-4.1-mini` on `GlobalStandard` capacity `10` which is the deployment shape used for the current local smoke test.
+The configured Foundry agent should have source material containing the same kind of architecture, network policy and deployment runbook context used by the mock samples. The setup wizard creates new agents with file-search source material when the sample context files are present. The verified sample path uses `gpt-4.1-mini` on `GlobalStandard` capacity `10`.
 
 For an existing configured agent, attach the source material with:
 ```powershell
@@ -30,9 +30,9 @@ uv run themis-setup attach-sources
 
 This command uploads the sample context files, creates a vector store and updates the configured Foundry agent with file search. It stores the vector-store ID and uploaded file IDs in `.themis/foundry.local.json`. The file contains resource identifiers, not credentials; it should remain local.
 
-The Foundry agent adapter path has been smoke-tested locally. Source attachment has also been tested. The post-source-attachment Foundry review command completed after moving the configured agent from `gpt-4o` capacity `1` to `gpt-4.1-mini` GlobalStandard capacity `10`. See [foundry_verification.md](foundry_verification.md) for the current evidence and the remaining IQ-grounding boundary.
+The Foundry-backed path has been verified with the included sample source material. Source attachment, retrieval and source-level citation rendering details are in [foundry_verification.md](foundry_verification.md).
 
-Do not describe Foundry mode as live IQ-verified with citations until it has returned a real response through this adapter and the response is grounded in configured source material with source-level citation evidence.
+That verification covers the included sample files and risky sample scenario. Other source corpora, model deployments or scenarios should be verified separately before being presented as equivalent.
 
 The default wizard writes `.themis/foundry.local.json` with the Foundry project endpoint and agent ID. `themis-review --context-mode foundry` reads that file automatically. `THEMIS_FOUNDRY_PROJECT_ENDPOINT`, `THEMIS_FOUNDRY_AGENT_ID`, `THEMIS_FOUNDRY_MODEL_DEPLOYMENT` and `THEMIS_FOUNDRY_AGENT_NAME` are optional overrides for local testing or alternate projects.
 

@@ -48,7 +48,7 @@ The pipeline is deliberately sequential. Each stage receives typed data from the
 
 `ChangeIntakeAgent` parses the submitted change into `ChangeProposal`. It extracts service, environment, change type, affected components, network exposure, identity change notes, data sensitivity, deployment window, rollback state, provided evidence and raw text.
 
-`ContextRetrievalAgent` retrieves policy, architecture and runbook context. Mock mode reads local markdown files from `samples/`. Foundry mode uses the configured Foundry agent and returns the same `RetrievedContext` contract. IQ-grounded retrieval should only be claimed when the agent has configured source material and the run has been verified.
+`ContextRetrievalAgent` retrieves policy, architecture and runbook context. Mock mode reads local markdown files from `samples/`. Foundry mode uses the configured Foundry agent and returns the same `RetrievedContext` contract. The included sample-source Foundry path has source-level citation evidence in [foundry_verification.md](foundry_verification.md).
 
 `RiskAnalysisAgent` identifies security, reliability and operational risks. Current categories include network exposure, identity/authentication, logging/observability, rollback and deployment window risk. Retrieved context can add explicit policy or runbook evidence to risk findings when the proposal conflicts with that context.
 
@@ -86,7 +86,7 @@ Mock and Foundry retrieval share the same downstream interface:
 retrieve_context(query, mode="mock" | "foundry") -> list[RetrievedContext]
 ```
 
-Downstream agents do not need to know whether the context came from local markdown files or Microsoft Foundry. This keeps the demo deterministic while allowing a live Foundry-backed path when credentials and quota are available. Retrieved context can include citations so reports can name local context files or Foundry file-search source material.
+Downstream agents do not need to know whether the context came from local markdown files or Microsoft Foundry. This keeps the demo deterministic while allowing a live Foundry-backed path when credentials and quota are available. Mock retrieval cites local context files. The verified Foundry sample path cites the attached sample source files.
 
 # User interfaces
 

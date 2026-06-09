@@ -1,60 +1,61 @@
 # Foundry verification
 
-Foundry mode is an optional adapter path for the `ContextRetrievalAgent`. Mock mode remains the guaranteed local demo path.
+Foundry mode is an optional context-retrieval path for `ContextRetrievalAgent`. Mock mode remains the guaranteed local demo path.
 
-# Current evidence
+# Verified sample path
 
-The Foundry agent adapter path was smoke-tested locally on 2026-06-08 before source-material attachment with:
+On 2026-06-09, the configured Foundry-backed retrieval path was verified against the included sample source material with:
 ```powershell
 uv run themis-review samples\change_risky.md --context-mode foundry
 ```
 
-The command completed successfully and returned a `RetrievedContext` through the shared Themis contract:
+The run used:
+- model deployment: `gpt-4.1-mini`
+- deployment SKU: `GlobalStandard`
+- capacity: `10`
+- source material: `samples/context_architecture.md`, `samples/context_network_policy.md`, `samples/context_deployment_runbook.md`
+
+The rendered report included Foundry file-search citation markers in the retrieved excerpt and this citation line:
 ```text
-source_id: foundry_agent
-kind: foundry agent
-recommendation: REVIEW REQUIRED
+Citations: context_architecture.md, context_network_policy.md, context_deployment_runbook.md
 ```
 
-The run also wrote a local `.themis/runs/` history entry. That local file is intentionally ignored by Git because it records environment-specific review history.
+The structured run log recorded:
+```text
+recommendation: REVIEW REQUIRED
+confidence: 0.10
+source_id: foundry_agent
+kind: foundry agent
+citation_count: 3
+```
 
-The configured Foundry agent was later updated with source material on 2026-06-08 with:
+Run logs are written under `.themis/runs/` and are intentionally ignored by Git because they are local run history.
+
+# Source attachment
+
+The configured Foundry agent was updated with sample source material using:
 ```powershell
 uv run themis-setup attach-sources
 ```
 
-That command completed and attached three sample context files through a Foundry vector store.
+That command attached three sample context files through a Foundry vector store. Earlier testing showed that a `gpt-4o` Standard deployment at capacity `1` could hit Azure request-rate limits before the review completed. The verified sample path uses `gpt-4.1-mini` on `GlobalStandard` capacity `10`.
 
-The original post-attachment run hit an Azure rate limit on a `gpt-4o` Standard deployment with capacity `1`. The project was then moved to a `gpt-4.1-mini` `GlobalStandard` deployment with capacity `10`. After that change, this command completed successfully:
-```powershell
-uv run themis-review samples\change_risky.md --context-mode foundry
-```
+# Verified scope
 
-The successful run returned a Foundry agent response through `RetrievedContext`, produced a `REVIEW REQUIRED` report and wrote a local run log under `.themis/runs/`.
-
-The source-material setup path is implemented and the local contract supports citations. The current Foundry smoke proves a post-attachment Foundry run can complete. The rendered report still shows a single Foundry-agent context block rather than source-level file citations.
-
-# What this proves
-
-The smoke test proves:
+This verification shows that:
 - the local Foundry configuration can be loaded
 - optional Foundry dependencies can call the configured project
-- the configured Foundry agent can return assistant context
-- Themis can pass that context through the same report contract used by mock mode
-- the setup assistant can attach local source material to the configured Foundry agent
-- the configured Foundry agent can run after source attachment when deployed on a model with sufficient request capacity
+- the setup assistant can attach the sample source material to the configured Foundry agent
+- the configured Foundry agent can retrieve from the attached sample source material
+- Themis can pass Foundry context through the same `RetrievedContext` contract used by mock mode
+- Themis can render source-level file-search citations in the markdown report
 
-# What this does not prove
+This verification covers the included sample source files and the risky sample change. Other source corpora, model deployments or scenarios should be verified separately before being presented as equivalent.
 
-The current evidence does not prove:
-- the response included Foundry file-search citations
-- Microsoft IQ grounding was verified end to end after source attachment
+# Limits
 
-# Public wording
-
-Safe wording:
-```text
-Themis includes deterministic mock retrieval and an optional Foundry agent adapter. The Foundry adapter has a local source-material setup path and returns the same RetrievedContext contract as mock mode when the Foundry run completes.
-```
-
-Do not use stronger wording such as “Foundry IQ-grounded retrieval with citations” unless a later verification pass proves configured source material and source-level citation evidence.
+This verification does not show that:
+- every Foundry run will include citations
+- arbitrary source material will be retrieved accurately without review
+- Themis is suitable for production deployment gates
+- Themis can replace human approval

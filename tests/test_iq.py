@@ -33,6 +33,17 @@ def test_foundry_mode_fails_clearly_without_configuration(
         retrieve_context("public load balancer", mode="foundry")
 
 
+def test_foundry_retrieval_prompt_requires_file_search_context() -> None:
+    from themis.iq import build_foundry_retrieval_prompt
+
+    prompt = build_foundry_retrieval_prompt("Expose admin service publicly.")
+
+    assert "attached file-search source material" in prompt
+    assert "Cite the source file" in prompt
+    assert "retrieve context only" in prompt
+    assert "Expose admin service publicly." in prompt
+
+
 class FakeFileCitation:
     file_id = "file-123"
 

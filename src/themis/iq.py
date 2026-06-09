@@ -67,7 +67,11 @@ def _retrieve_foundry_context(query: str) -> list[RetrievedContext]:
         credential=DefaultAzureCredential(),
     )
     thread = client.agents.threads.create()
-    client.agents.messages.create(thread_id=thread.id, role="user", content=query)
+    client.agents.messages.create(
+        thread_id=thread.id,
+        role="user",
+        content=build_foundry_retrieval_prompt(query),
+    )
     run = client.agents.runs.create_and_process(
         thread_id=thread.id,
         agent_id=configuration.agent_id,
@@ -108,6 +112,21 @@ def foundry_run_failure_message(run: Any) -> str:
     if parts:
         message = f"{message} ({': '.join(str(part) for part in parts)})"
     return message
+
+
+def build_foundry_retrieval_prompt(query: str) -> str:
+    return "\n".join(
+        [
+            "Use the attached file-search source material for this infrastructure change review.",
+            "Return concise context excerpts that are relevant to public exposure, authentication, source ranges, monitoring, rollback and deployment timing.",
+            "Cite the source file for each excerpt when file-search citations are available.",
+            "Do not approve or reject the change; retrieve context only.",
+            "If the configured source material does not support a point, say that the source material did not cover it.",
+            "",
+            "Change proposal:",
+            query,
+        ]
+    )
 
 
 def extract_message_text_and_citations(

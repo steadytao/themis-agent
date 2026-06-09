@@ -10,7 +10,7 @@ def render_markdown_report(report: ReviewReport) -> str:
         "## Recommendation",
         report.recommendation.value,
         "",
-        "## Confidence",
+        "## Readiness confidence",
         f"{report.confidence:.2f}",
         "",
         "## Summary",

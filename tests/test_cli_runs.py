@@ -17,6 +17,20 @@ Rollback will restore the previous listener.
 """
 
 
+def test_cli_configures_stdout_for_unicode_citation_markers(monkeypatch) -> None:
+    calls = []
+
+    class FakeStdout:
+        def reconfigure(self, **kwargs):
+            calls.append(kwargs)
+
+    monkeypatch.setattr(sys, "stdout", FakeStdout())
+
+    cli._configure_stdout()
+
+    assert calls == [{"encoding": "utf-8", "errors": "replace"}]
+
+
 def test_review_cli_writes_local_run_log(
     tmp_path: Path,
     monkeypatch,

@@ -57,7 +57,7 @@ def main() -> None:
         else:
             recommendation_col, confidence_col = st.columns(2)
             recommendation_col.metric("Recommendation", report.recommendation.value)
-            confidence_col.metric("Confidence", f"{report.confidence:.2f}")
+            confidence_col.metric("Readiness confidence", f"{report.confidence:.2f}")
             st.subheader("Summary")
             st.write(report.summary)
             st.subheader("Risks")

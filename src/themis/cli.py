@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import sys
 from pathlib import Path
 
 from themis.pipeline import run_review
@@ -9,6 +10,7 @@ from themis.run_logs import list_review_runs, load_review_run_markdown, save_rev
 
 
 def main() -> None:
+    _configure_stdout()
     parser = argparse.ArgumentParser(description="Run a Themis infrastructure change review.")
     parser.add_argument("proposal", type=Path, nargs="?", help="Path to a markdown change proposal.")
     parser.add_argument("--context-mode", choices=["mock", "foundry"], default="mock")
@@ -49,6 +51,16 @@ def _print_run_list() -> None:
             f"{run.path} | {run.created_at} | {run.context_mode} | "
             f"{run.recommendation} | {run.proposal_path}"
         )
+
+
+def _configure_stdout() -> None:
+    reconfigure = getattr(sys.stdout, "reconfigure", None)
+    if reconfigure is None:
+        return
+    try:
+        reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, OSError, ValueError):
+        return
 
 
 if __name__ == "__main__":

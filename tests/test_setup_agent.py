@@ -66,6 +66,8 @@ def test_build_agent_instructions_keep_read_only_boundary() -> None:
     assert "Do not approve changes" in instructions
     assert "Do not deploy infrastructure" in instructions
     assert "architecture" in instructions.lower()
+    assert "file search source material" in instructions
+    assert "Cite the source file" in instructions
 
 
 def test_create_foundry_agent_returns_configuration() -> None:

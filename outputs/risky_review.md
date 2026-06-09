@@ -3,7 +3,7 @@
 ## Recommendation
 REVIEW REQUIRED
 
-## Confidence
+## Readiness confidence
 0.10
 
 ## Summary

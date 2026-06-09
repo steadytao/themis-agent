@@ -3,7 +3,7 @@
 ## Recommendation
 APPROVE WITH CONDITIONS
 
-## Confidence
+## Readiness confidence
 0.85
 
 ## Summary

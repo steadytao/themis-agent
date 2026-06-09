@@ -25,7 +25,7 @@ It does not model every cloud service, every identity pattern or every deploymen
 
 Mock mode is the guaranteed path. Foundry mode depends on Azure subscription state, regional model quota, optional dependencies and local `.themis` configuration. The setup assistant can create or use a Foundry agent and `uv run themis-setup attach-sources` can attach the sample context files through Foundry file search.
 
-The current local environment has completed `uv run themis-review samples/change_risky.md --context-mode foundry` after source attachment using a `gpt-4.1-mini` GlobalStandard deployment. Treat stronger claims about IQ grounding with source-level citations as unverified unless the rendered report includes that citation evidence.
+The included sample-source Foundry file-search path has been verified with source-level citations using `gpt-4.1-mini` on `GlobalStandard` capacity `10`. The evidence is in [foundry_verification.md](foundry_verification.md). Other source corpora, model deployments or scenarios should be verified separately before being presented as equivalent.
 
 # Non-goals
 

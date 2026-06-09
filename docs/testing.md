@@ -12,19 +12,19 @@ uv run python -m compileall -q src app.py
 git -c core.autocrlf=false diff --check
 ```
 
-The repository also supports a CLI smoke test:
+The repository also supports a CLI review check:
 ```powershell
 uv run themis-review samples/change_risky.md
 uv run themis-review --list-runs
 ```
 
-Run the Foundry smoke test only when local `.themis` configuration and quota are available:
+Run the Foundry verification path only when local `.themis` configuration and quota are available:
 ```powershell
 uv run themis-setup attach-sources
 uv run themis-review samples/change_risky.md --context-mode foundry
 ```
 
-The current local Foundry smoke uses `gpt-4.1-mini` on `GlobalStandard` capacity `10`. A one-capacity `gpt-4o` Standard deployment can hit Azure request-rate limits before the review completes.
+The verified sample-source Foundry path uses `gpt-4.1-mini` on `GlobalStandard` capacity `10`. A one-capacity `gpt-4o` Standard deployment can hit Azure request-rate limits before the review completes.
 
 # Required coverage
 
@@ -65,4 +65,4 @@ uv run themis-setup attach-sources
 uv run themis-review samples/change_risky.md --context-mode foundry
 ```
 
-Do not describe Foundry mode as live IQ-verified with citations if that final command has not passed against configured source material in the current environment with source-level citation evidence.
+The sample-source Foundry citation evidence is in [foundry_verification.md](foundry_verification.md). Other source corpora, model deployments or demo scenarios should be verified separately before being presented as equivalent.

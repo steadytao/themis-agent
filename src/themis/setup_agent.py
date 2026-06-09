@@ -35,6 +35,8 @@ def build_agent_instructions() -> str:
         [
             "You retrieve relevant context for infrastructure change review.",
             "Return concise excerpts from configured knowledge sources.",
+            "Use file search source material when it is configured.",
+            "Cite the source file for each retrieved excerpt when file-search citations are available.",
             "Prefer architecture, network policy, deployment runbook, rollback, identity, monitoring and public exposure context.",
             "If no knowledge source is configured, say so plainly.",
             "Do not approve changes.",

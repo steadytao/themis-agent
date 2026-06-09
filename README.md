@@ -6,7 +6,7 @@
 
 [![Python](https://img.shields.io/badge/Python-3.12%2B-D9A441.svg?style=for-the-badge&logo=python&logoColor=white&labelColor=15120C)](pyproject.toml "Python")
 [![Streamlit](https://img.shields.io/badge/UI-Streamlit-C88A2B.svg?style=for-the-badge&logo=streamlit&logoColor=white&labelColor=15120C)](app.py "Streamlit UI")
-[![Tests](https://img.shields.io/badge/Tests-67_passing-9E7A33.svg?style=for-the-badge&labelColor=15120C)](docs/testing.md "Testing")
+[![Tests](https://img.shields.io/badge/Tests-69_passing-9E7A33.svg?style=for-the-badge&labelColor=15120C)](docs/testing.md "Testing")
 [![Licence: MIT](https://img.shields.io/badge/Licence-MIT-C88A2B.svg?style=for-the-badge&labelColor=15120C)](LICENSE "Licence")
 
 </div>
@@ -17,7 +17,7 @@ It is built for the Microsoft Agents League Reasoning Agents track. The project 
 
 Section | Start here for
 :-- | :--
-[What Themis is](#what-themis-is) | project scope and non-goals
+[What Themis is](#what-themis-is) | project scope
 [Quick start](#quick-start) | deterministic local demo
 [Example input](#example-input) | main risky scenario
 [Example output](#example-output) | checked-in sample reports
@@ -35,12 +35,6 @@ Section | Start here for
 Themis is a pre-change review assistant for infrastructure work. It separates facts from assumptions, retrieves relevant context, ranks risks, identifies missing evidence, proposes verification steps and asks rollback questions.
 
 The output is advisory. A human reviewer still approves, rejects or asks for more information.
-
-## What Themis is not
-
-Themis does not deploy infrastructure. It does not scan live systems. It does not require cloud credentials in mock mode. It does not replace human approval.
-
-The review pipeline is read-only. The optional setup assistant is different: it can create Azure and Foundry resources after interactive confirmation.
 
 ## Quick start
 ```powershell
@@ -110,7 +104,7 @@ flowchart TD
     gaps --> verification["VerificationPlannerAgent"]
     verification --> report["ReviewReportAgent"]
     report --> outputs["Markdown report\nreasoning trace\nlocal run log"]
-    guardrails -. "blocks apparent secrets\nand mutation requests" .-> outputs
+    guardrails -. "flags apparent secrets\nand mutation requests" .-> outputs
     outputs -. "advisory only\nhuman approval remains required" .-> reviewer["Human reviewer"]
 ```
 
@@ -138,7 +132,7 @@ Use `uv run themis-setup check` to diagnose missing Azure or Foundry setup witho
 
 ## Safety model
 
-Themis blocks apparent secrets, private keys, tokens and requests to deploy, scan live systems, exploit, bypass approval, suppress logging or hide risk.
+Themis flags apparent secrets, private keys, tokens and requests to deploy, scan live systems, exploit, bypass approval, suppress logging or hide risk. Guardrail findings are included in the report, sensitive excerpts are redacted in saved run logs and a positive recommendation is prevented.
 
 Every report must include verification steps, rollback questions and a human approval reminder.
 

@@ -4,7 +4,7 @@
 REVIEW REQUIRED
 
 ## Confidence
-0.16
+0.10
 
 ## Summary
 Themis reviewed 'Public admin service exposure' for internal admin portal in production.
@@ -33,7 +33,7 @@ Themis reviewed 'Public admin service exposure' for internal admin portal in pro
 
 ## Missing evidence
 - **Authentication model** (blocking)
-  - Why it matters: Public or administrative access must not rely on unclear identity controls.
+  - Why it matters: Retrieved context expects authentication or access-denial evidence for public or administrative access.
   - Owner question: Which identity provider, policy and negative-access test prove unauthorised access is denied?
 - **Owner approval** (conditional)
   - Why it matters: The service owner should accept the exposure and operational risk.
@@ -52,6 +52,14 @@ Themis reviewed 'Public admin service exposure' for internal admin portal in pro
   - Evidence: Proposal references any source or 0.0.0.0/0.
   - Impact: The exposed service may be reachable from more networks than intended.
   - Mitigation: Replace broad source ranges with approved CIDR ranges and record the approval.
+- **network exposure** (high) - Retrieved context requires approved source ranges for this exposure.
+  - Evidence: Retrieved context `Context architecture note` expects approved source ranges; the proposal does not provide approved source-range evidence.
+  - Impact: The public route may be broader than the documented policy or runbook permits.
+  - Mitigation: Record the approved CIDR ranges, approval source and negative-access test before review.
+- **identity/authentication** (high) - Retrieved context requires authentication evidence for public or administrative access.
+  - Evidence: Retrieved context `Context network policy` expects authentication or access-denial evidence; the proposal leaves the authentication model unclear.
+  - Impact: The change may expose an administrative surface before identity controls are verified.
+  - Mitigation: Document the identity provider, access policy and negative-access test before review.
 - **deployment window** (medium) - The change is scheduled during business hours.
   - Evidence: business hours
   - Impact: A failed routing or TLS change may affect active users and lengthen recovery pressure.

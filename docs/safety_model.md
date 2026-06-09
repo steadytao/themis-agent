@@ -9,13 +9,13 @@ It does not:
 - claim a change is safe
 - replace human approval
 
-Themis blocks or redacts apparent secrets, private keys, tokens and requests to deploy, exploit, bypass approval, suppress logging or hide risk.
+Themis flags or redacts apparent secrets, private keys, tokens and requests to deploy, exploit, bypass approval, suppress logging or hide risk. Guardrail findings are included in the report and prevent a positive recommendation.
 
 Every report includes a human approval reminder, verification steps and rollback questions.
 
-# Blocking guardrails
+# Input guardrails
 
-The input guardrail checks for apparent credential material and mutation-oriented requests before the final report is produced. Current blocking or redaction targets include:
+The input guardrail checks for apparent credential material and mutation-oriented requests before the final report is produced. Current flagging or redaction targets include:
 - API keys, passwords, tokens and private keys
 - requests to deploy or mutate infrastructure
 - requests to scan live systems

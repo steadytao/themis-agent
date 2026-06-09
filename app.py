@@ -102,7 +102,8 @@ def main() -> None:
             - Themis does not deploy infrastructure.
             - Themis does not scan live systems.
             - Themis does not require cloud credentials in mock mode.
-            - Themis blocks apparent secrets and mutation requests.
+            - Themis flags apparent secrets and mutation requests.
+            - Guardrail findings prevent a positive recommendation.
             - Themis produces advisory notes for human review, not automatic approval.
             """
         )

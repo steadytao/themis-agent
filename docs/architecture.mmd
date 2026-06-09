@@ -11,5 +11,5 @@ flowchart TD
     verification --> report["ReviewReportAgent"]
     report --> outputs["Markdown report\nreasoning trace\nlocal run log"]
 
-    guardrails -. "blocks apparent secrets\nand mutation requests" .-> outputs
+    guardrails -. "flags apparent secrets\nand mutation requests" .-> outputs
     outputs -. "advisory only\nhuman approval remains required" .-> reviewer["Human reviewer"]

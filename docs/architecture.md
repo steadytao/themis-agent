@@ -14,11 +14,11 @@ flowchart TD
     gaps --> verification["VerificationPlannerAgent"]
     verification --> report["ReviewReportAgent"]
     report --> outputs["Markdown report\nreasoning trace\nlocal run log"]
-    guardrails -. "blocks apparent secrets\nand mutation requests" .-> outputs
+    guardrails -. "flags apparent secrets\nand mutation requests" .-> outputs
     outputs -. "advisory only\nhuman approval remains required" .-> reviewer["Human reviewer"]
 ```
 
-Guardrails run before the report is produced. They block apparent secrets and mutation-oriented requests. The final report remains advisory.
+Guardrails run before the report is produced. They flag apparent secrets and mutation-oriented requests, include those findings in the report, redact sensitive excerpts in saved logs and prevent a positive recommendation. The final report remains advisory.
 
 # Product boundary
 
@@ -50,9 +50,9 @@ The pipeline is deliberately sequential. Each stage receives typed data from the
 
 `ContextRetrievalAgent` retrieves policy, architecture and runbook context. Mock mode reads local markdown files from `samples/`. Foundry mode uses the configured Foundry agent and returns the same `RetrievedContext` contract. IQ-grounded retrieval should only be claimed when the agent has configured source material and the run has been verified.
 
-`RiskAnalysisAgent` identifies security, reliability and operational risks. Current categories include network exposure, identity/authentication, logging/observability, rollback and deployment window risk.
+`RiskAnalysisAgent` identifies security, reliability and operational risks. Current categories include network exposure, identity/authentication, logging/observability, rollback and deployment window risk. Retrieved context can add explicit policy or runbook evidence to risk findings when the proposal conflicts with that context.
 
-`EvidenceGapAgent` finds missing information that should be resolved by the owner or reviewer. Current gaps include authentication model, rollback plan, owner approval, approved source ranges and post-change verification.
+`EvidenceGapAgent` finds missing information that should be resolved by the owner or reviewer. Current gaps include authentication model, rollback plan, owner approval, approved source ranges and post-change verification. It can use context-backed risks to explain why a missing item matters.
 
 `VerificationPlannerAgent` creates pre-change, post-change and rollback verification steps. The output is advisory: it asks what should be checked rather than running commands.
 

@@ -32,8 +32,10 @@ Behaviour changes should include tests for:
 - risky changes producing `REVIEW REQUIRED` or `DO NOT PROCEED YET`
 - incomplete changes producing `INSUFFICIENT EVIDENCE`
 - safe changes still including verification steps
-- apparent API keys or private keys being blocked or redacted
-- requests to deploy, exploit, bypass approval, suppress logging or hide risk being blocked
+- apparent API keys or private keys being flagged or redacted
+- requests to deploy, exploit, bypass approval, suppress logging or hide risk being flagged
+- guardrail findings preventing a positive recommendation
+- retrieved context influencing at least one risk or evidence-gap judgement
 - missing rollback evidence reducing confidence
 - overbroad public exposure producing high-severity risk
 - reports including rollback questions

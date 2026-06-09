@@ -78,6 +78,22 @@ def test_overbroad_source_range_creates_high_severity_risk() -> None:
     assert any(risk.severity == "high" and "overbroad" in risk.claim.lower() for risk in report.risks)
 
 
+def test_retrieved_context_informs_risk_and_gap_judgement() -> None:
+    report = run_review(read_sample("change_risky.md"), context_mode="mock")
+
+    assert any(
+        "retrieved context" in risk.evidence.lower()
+        and "source range" in risk.evidence.lower()
+        for risk in report.risks
+    )
+    assert any(
+        "retrieved context" in gap.why_it_matters.lower()
+        for gap in report.evidence_gaps
+        if gap.missing_item in {"Authentication model", "Approved source ranges"}
+    )
+    assert len(report.assumptions) == len(set(report.assumptions))
+
+
 def test_business_hours_deployment_adds_pre_change_timing_step() -> None:
     report = run_review(read_sample("change_risky.md"), context_mode="mock")
 

@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+import re
+
 from themis.contracts import ChangeProposal, RetrievedContext, RiskFinding
 
 
 def analyse_risks(proposal: ChangeProposal, context: list[RetrievedContext]) -> list[RiskFinding]:
-    del context
     lower = proposal.raw_text.lower()
     risks: list[RiskFinding] = []
 
@@ -49,6 +50,52 @@ def analyse_risks(proposal: ChangeProposal, context: list[RetrievedContext]) -> 
             )
         )
 
+    if (
+        proposal.network_exposure == "public"
+        and _context_requires_source_ranges(context)
+        and not _has_source_range_evidence(lower)
+    ):
+        source = _first_matching_context_title(context, ("source range", "cidr", "public endpoint"))
+        risks.append(
+            RiskFinding(
+                category="network exposure",
+                severity="high",
+                claim="Retrieved context requires approved source ranges for this exposure.",
+                evidence=(
+                    f"Retrieved context {source} expects approved source ranges; "
+                    "the proposal does not provide approved source-range evidence."
+                ),
+                assumption=None,
+                impact="The public route may be broader than the documented policy or runbook permits.",
+                suggested_mitigation=(
+                    "Record the approved CIDR ranges, approval source and negative-access test before review."
+                ),
+            )
+        )
+
+    if (
+        proposal.network_exposure == "public"
+        and proposal.identity_changes in {"missing or unclear", "unknown"}
+        and _context_requires_authentication(context)
+    ):
+        source = _first_matching_context_title(context, ("authentication", "identity", "negative-access"))
+        risks.append(
+            RiskFinding(
+                category="identity/authentication",
+                severity="high",
+                claim="Retrieved context requires authentication evidence for public or administrative access.",
+                evidence=(
+                    f"Retrieved context {source} expects authentication or access-denial evidence; "
+                    "the proposal leaves the authentication model unclear."
+                ),
+                assumption="The service may rely on network placement rather than explicit authentication.",
+                impact="The change may expose an administrative surface before identity controls are verified.",
+                suggested_mitigation=(
+                    "Document the identity provider, access policy and negative-access test before review."
+                ),
+            )
+        )
+
     if proposal.deployment_window == "business hours":
         risks.append(
             RiskFinding(
@@ -89,3 +136,40 @@ def analyse_risks(proposal: ChangeProposal, context: list[RetrievedContext]) -> 
         )
 
     return risks
+
+
+def _context_requires_source_ranges(context: list[RetrievedContext]) -> bool:
+    return _context_mentions(context, ("source range", "cidr", "approved ranges", "public endpoint"))
+
+
+def _context_requires_authentication(context: list[RetrievedContext]) -> bool:
+    return _context_mentions(context, ("authentication", "identity", "negative-access", "unauthorised"))
+
+
+def _context_mentions(context: list[RetrievedContext], terms: tuple[str, ...]) -> bool:
+    return any(any(term in _context_blob(item) for term in terms) for item in context)
+
+
+def _first_matching_context_title(context: list[RetrievedContext], terms: tuple[str, ...]) -> str:
+    for item in context:
+        blob = _context_blob(item)
+        if any(term in blob for term in terms):
+            return f"`{item.title}`"
+    return "source material"
+
+
+def _context_blob(context: RetrievedContext) -> str:
+    return f"{context.title} {context.relevant_excerpt} {context.reason_used}".lower()
+
+
+def _has_source_range_evidence(lower: str) -> bool:
+    source_patterns = (r"source ranges?", r"cidr", r"allowed ip")
+    for pattern in source_patterns:
+        if not re.search(rf"\b{pattern}\b", lower):
+            continue
+        if re.search(rf"\b(?:no|without|missing)\b[^.]*\b{pattern}\b", lower):
+            continue
+        if re.search(rf"\bdoes not\b[^.]*\b{pattern}\b", lower):
+            continue
+        return True
+    return False

@@ -6,17 +6,24 @@ from themis.contracts import ChangeProposal, EvidenceGap, RiskFinding
 
 
 def find_evidence_gaps(proposal: ChangeProposal, risks: list[RiskFinding]) -> list[EvidenceGap]:
-    del risks
     lower = proposal.raw_text.lower()
     gaps: list[EvidenceGap] = []
+    context_requires_authentication = _has_context_risk(risks, "authentication")
+    context_requires_source_ranges = _has_context_risk(risks, "source range")
 
     if proposal.identity_changes in {"missing or unclear", "unknown"} and (
         proposal.network_exposure == "public" or proposal.data_sensitivity == "sensitive"
     ):
+        why_it_matters = "Public or administrative access must not rely on unclear identity controls."
+        if context_requires_authentication:
+            why_it_matters = (
+                "Retrieved context expects authentication or access-denial evidence for public "
+                "or administrative access."
+            )
         gaps.append(
             EvidenceGap(
                 missing_item="Authentication model",
-                why_it_matters="Public or administrative access must not rely on unclear identity controls.",
+                why_it_matters=why_it_matters,
                 blocking_level="blocking",
                 question_for_owner="Which identity provider, policy and negative-access test prove unauthorised access is denied?",
             )
@@ -45,10 +52,16 @@ def find_evidence_gaps(proposal: ChangeProposal, risks: list[RiskFinding]) -> li
     if proposal.network_exposure == "public" and not any(
         _has_positive_evidence(lower, term) for term in ["source range", "cidr", "allowed ip"]
     ):
+        why_it_matters = "A public endpoint needs explicit reachability boundaries."
+        if context_requires_source_ranges:
+            why_it_matters = (
+                "Retrieved context expects approved source ranges before public administrative "
+                "exposure is reviewed."
+            )
         gaps.append(
             EvidenceGap(
                 missing_item="Approved source ranges",
-                why_it_matters="A public endpoint needs explicit reachability boundaries.",
+                why_it_matters=why_it_matters,
                 blocking_level="blocking",
                 question_for_owner="Which source ranges are allowed, and who approved them?",
             )
@@ -65,6 +78,10 @@ def find_evidence_gaps(proposal: ChangeProposal, risks: list[RiskFinding]) -> li
         )
 
     return gaps
+
+
+def _has_context_risk(risks: list[RiskFinding], term: str) -> bool:
+    return any("retrieved context" in risk.evidence.lower() and term in risk.evidence.lower() for risk in risks)
 
 
 def _has_positive_evidence(lower: str, item: str) -> bool:

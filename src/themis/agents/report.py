@@ -126,4 +126,5 @@ def _assumptions(proposal: ChangeProposal, risks: list[RiskFinding]) -> list[str
     assumptions = [risk.assumption for risk in risks if risk.assumption]
     if proposal.data_sensitivity == "unknown":
         assumptions.append("Data sensitivity is not stated and should be confirmed by the owner.")
+    assumptions = list(dict.fromkeys(assumptions))
     return assumptions or ["No major unstated assumptions were needed beyond the submitted proposal."]

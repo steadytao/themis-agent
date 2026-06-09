@@ -7,6 +7,8 @@ Themis documentation is split by purpose. Start with the repository README for i
 - [safety_model.md](safety_model.md), read-only boundary, guardrails and human approval model
 - [iq_integration.md](iq_integration.md), mock retrieval, Foundry setup and verification scope
 - [foundry_verification.md](foundry_verification.md), Foundry sample-source citation evidence
+- [public_interest_use_case.md](public_interest_use_case.md), public-interest infrastructure review example
+- [accessibility.md](accessibility.md), screen reader support and WCAG-oriented design
 - [testing.md](testing.md), expected checks, coverage targets and known limits
 - [limitations.md](limitations.md), explicit non-goals and current gaps
 
@@ -28,3 +30,7 @@ For verification:
 - read [testing.md](testing.md)
 - read [limitations.md](limitations.md)
 - read [foundry_verification.md](foundry_verification.md)
+
+For public-facing review:
+- read [public_interest_use_case.md](public_interest_use_case.md)
+- read [accessibility.md](accessibility.md)

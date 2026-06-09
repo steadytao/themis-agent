@@ -12,6 +12,7 @@ SAMPLES = {
     "Safe private certificate rotation": Path("samples/change_safe.md"),
     "Risky public admin exposure": Path("samples/change_risky.md"),
     "Incomplete admin route update": Path("samples/change_incomplete.md"),
+    "Community clinic admin portal": Path("samples/change_clinic_admin_portal.md"),
 }
 
 
@@ -77,8 +78,11 @@ def main() -> None:
                 st.write(f"- {question}")
             st.subheader("Retrieved context")
             st.dataframe(context_rows(report), hide_index=True, width="stretch")
-            with st.expander("Markdown report"):
-                st.markdown(st.session_state.markdown)
+            st.subheader("Markdown report")
+            st.write(
+                "Complete linear report for plain-text review, keyboard navigation and assistive technology."
+            )
+            st.text_area("Markdown report", value=st.session_state.markdown, height=520)
             st.download_button(
                 "Download markdown report",
                 st.session_state.markdown,

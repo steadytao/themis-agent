@@ -1,12 +1,14 @@
 <div align="center">
 
+![Themis Demo GIF](.github/assets/themis-demo.gif)
+
 [![Themis](https://img.shields.io/badge/Themis-Infrastructure_change_review-D9A441.svg?style=for-the-badge&labelColor=15120C)](#readme "Themis")
 [![Track](https://img.shields.io/badge/Agents_League-Reasoning_Agents-C88A2B.svg?style=for-the-badge&labelColor=15120C)](#readme "Reasoning Agents")
 [![Pydantic](https://img.shields.io/badge/Contracts-Pydantic-D9A441.svg?style=for-the-badge&labelColor=15120C)](src/themis/contracts.py "Typed contracts")
 
 [![Python](https://img.shields.io/badge/Python-3.12%2B-D9A441.svg?style=for-the-badge&logo=python&logoColor=white&labelColor=15120C)](pyproject.toml "Python")
 [![Streamlit](https://img.shields.io/badge/UI-Streamlit-C88A2B.svg?style=for-the-badge&logo=streamlit&logoColor=white&labelColor=15120C)](app.py "Streamlit UI")
-[![Tests](https://img.shields.io/badge/Tests-71_passing-9E7A33.svg?style=for-the-badge&labelColor=15120C)](docs/testing.md "Testing")
+[![Tests](https://img.shields.io/badge/Tests-72_passing-9E7A33.svg?style=for-the-badge&labelColor=15120C)](docs/testing.md "Testing")
 [![Licence: MIT](https://img.shields.io/badge/Licence-MIT-C88A2B.svg?style=for-the-badge&labelColor=15120C)](LICENSE "Licence")
 
 </div>
@@ -18,23 +20,33 @@ It is built for the Microsoft Agents League Reasoning Agents track. The project 
 Section | Start here for
 :-- | :--
 [What Themis is](#what-themis-is) | project scope
+[Why Themis matters](#why-themis-matters) | practical need
 [Quick start](#quick-start) | deterministic local demo
 [Example input](#example-input) | main risky scenario
 [Example output](#example-output) | checked-in sample reports
 [Architecture](#architecture) | six-agent pipeline
 [Microsoft IQ and Foundry](#microsoft-iq-and-foundry) | mock retrieval, Foundry retrieval and verification scope
 [Safety model](#safety-model) | guardrails and human approval
+[Public-interest use case](#public-interest-use-case) | community infrastructure review
+[Screen reader and WCAG-oriented design](#screen-reader-and-wcag-oriented-design) | CLI, Markdown and accessible review output
+[Judging alignment](#judging-alignment) | how the project maps to the rubric
 [Documentation](#documentation) | deeper project documents
-[Demo video](#demo-video) | recording link
 [Project structure](#project-structure) | repository layout
 [Tests](#tests) | verification commands
 [Limitations](#limitations) | current limits
+[Demo media](#demo-media) | final video and README media
 
 ## What Themis is
 
 Themis is a pre-change review assistant for infrastructure work. It separates facts from assumptions, retrieves relevant context, ranks risks, identifies missing evidence, proposes verification steps and asks rollback questions.
 
 The output is advisory. A human reviewer still approves, rejects or asks for more information.
+
+## Why Themis matters
+
+Infrastructure changes often fail before the deployment starts: the change record does not name the exposure boundary, the rollback path is vague, owner approval is missing or the post-change checks only prove that something responds. Themis turns that kind of proposal into review material a human can act on before users are affected.
+
+The project is deliberately read-only. It does not deploy, scan, mutate cloud resources or replace approval. Its value is in making the reasoning visible: what is known, what is assumed, what is missing, what should be verified and what should stop the change from being treated as ready.
 
 ## Quick start
 ```powershell
@@ -87,6 +99,7 @@ Sample reports are kept under `outputs/`:
 - [safe_review.md](outputs/safe_review.md)
 - [risky_review.md](outputs/risky_review.md)
 - [incomplete_review.md](outputs/incomplete_review.md)
+- [clinic_admin_portal_review.md](outputs/clinic_admin_portal_review.md)
 
 The risky report is the main demo path because it shows risk ranking, missing evidence, verification planning, rollback questions and the advisory recommendation model.
 
@@ -136,6 +149,31 @@ Themis flags apparent secrets, private keys, tokens and requests to deploy, scan
 
 Every report must include verification steps, rollback questions and a human approval reminder.
 
+## Public-interest use case
+
+Themis is useful for public-interest infrastructure where a small team may not have dedicated platform-security review capacity. A school, clinic, council team or nonprofit can use Themis to turn a proposed infrastructure change into structured review material before deployment: risks, missing evidence, verification steps, rollback questions and human-review notes.
+
+The checked-in clinic sample shows this pattern with a synthetic appointment-admin portal exposure. Themis does not approve or deploy the change. It helps reviewers ask better questions before a change affects staff, patients, students or residents.
+
+## Screen reader and WCAG-oriented design
+
+Themis provides both CLI and browser workflows so review material is not locked inside a visual-only interface. Review output is available as Markdown, uses text labels rather than colour-only severity, includes structured headings and can be saved into tickets, Git history or plain-text review workflows.
+
+The Markdown report is intended to remain readable when used with a screen reader or reviewed linearly in plain text. The normal `Report` tab includes a labelled `Markdown report` text area and Markdown download, so reviewers do not have to rely on dataframe views.
+
+The project does not claim completed WCAG compliance or certification. It does follow WCAG-oriented practices where practical: labelled controls, keyboard-operable workflows, visible focus, strong contrast, text alternatives for media and no colour-only risk signalling.
+
+## Judging alignment
+
+Criterion | Themis evidence
+:-- | :--
+Accuracy and relevance | Reviews a realistic infrastructure-change problem and produces concrete risks, missing evidence, verification steps and rollback questions.
+Reasoning and multi-step thinking | Uses a six-stage pipeline with typed handoffs, facts, assumptions, retrieved context, risk ranking and a reasoning trace.
+Creativity and originality | Focuses on pre-change infrastructure judgement rather than acting as a deployment bot or generic chatbot.
+User experience and presentation | Provides a CLI path, Streamlit UI, sample selector, Markdown export, checked sample outputs and public docs.
+Reliability and safety | Keeps the tool read-only, flags secrets and mutation requests, redacts sensitive saved logs and keeps human approval required.
+Community value | Helps small public-interest teams structure infrastructure review before changes affect users.
+
 ## Documentation
 
 Project documentation is organised under [docs/README.md](docs/README.md):
@@ -143,14 +181,10 @@ Project documentation is organised under [docs/README.md](docs/README.md):
 - [safety_model.md](docs/safety_model.md), guardrails and read-only review boundary
 - [iq_integration.md](docs/iq_integration.md), mock retrieval, Foundry setup and verification scope
 - [foundry_verification.md](docs/foundry_verification.md), Foundry sample-source citation evidence
+- [public_interest_use_case.md](docs/public_interest_use_case.md), public-interest infrastructure review example
+- [accessibility.md](docs/accessibility.md), screen reader support and WCAG-oriented design
 - [testing.md](docs/testing.md), expected checks and coverage targets
 - [limitations.md](docs/limitations.md), non-goals and current limits
-
-## Demo video
-
-The project has a working local demo path through both the CLI and Streamlit UI. The Foundry-backed sample-source retrieval path has also been verified locally with source-level citations.
-
-Demo video: to be added.
 
 ## Project structure
 
@@ -177,3 +211,17 @@ Tests cover contracts, guardrails, deterministic mock pipeline output, report se
 ## Limitations
 
 The sample scenarios are synthetic. The default mode is deterministic and local. Themis is advisory and intentionally avoids live infrastructure access.
+
+## Demo media
+
+The project has a working local demo path through both the CLI and Streamlit UI. The Foundry-backed sample-source retrieval path has also been verified locally with source-level citations.
+
+README media is stored under `.github/assets/`:
+- [themis-demo.gif](.github/assets/themis-demo.gif), short README walkthrough
+- [themis-review.png](.github/assets/themis-review.png), review input screen
+- [themis-report.png](.github/assets/themis-report.png), report summary and risk table
+- [themis-markdown-report.png](.github/assets/themis-markdown-report.png), linear Markdown report
+- [themis-reasoning-trace.png](.github/assets/themis-reasoning-trace.png), reasoning trace
+- [themis-safety-model.png](.github/assets/themis-safety-model.png), safety model
+
+Demo video: to be added.
